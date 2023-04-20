@@ -1,18 +1,42 @@
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import { BsFillEyeSlashFill,BsFillEyeFill} from "react-icons/bs";
 import { Link } from 'react-router-dom';
+import { AuthProvider } from '../../ContexProvider/ContexProvider';
 
 const LogIn = () => {
     const [hideShow,setHideShow] = useState(false);
-   const handleShow = () =>{
-    setHideShow(!hideShow)
-   }
+    const {loginWithGoogle} = useContext(AuthProvider)
+
+    //password hide show method
+    const handleShow = () =>{
+        setHideShow(!hideShow)
+    }
+    //login with google
+    const handleWithGoogle = () =>{
+        loginWithGoogle()
+        .then(result =>{
+            const user = result.user
+            console.log(user)
+        })
+        .catch(error =>{
+            console.log(error);
+        })
+    }
+
+const handleLogin = e =>{
+    e.preventDefault()
+    const form = e.target;
+    const email = form.email.value;
+    const password = form.password.value;
+    console.log(email,password)
+}
+
     return (
         <div  className='mt-16 px-28 mb-12 '>
             <h2 className='text-4xl text-center mb-11 font-serif font-semibold'>Login Please</h2>
             
             <div className='bg-neutral-300 p-10 rounded'>
-            <form  >
+            <form  onSubmit={handleLogin}>
                 <div>
                     <label className='text-3xl'  htmlFor="email">Email:</label>
                     <input className=' rounded border-yellow-950 text-3xl px-3 py-2 mt-2 w-full h-auto' type="email" name='email' placeholder='Enter your Email' />
@@ -38,7 +62,7 @@ const LogIn = () => {
 
 
                 <div className='flex justify-between items-center'>
-                    <button className=' bg-blue-600 text-2xl py-4 px-4 rounded hover:bg-blue-800 text-white mt-5'> Log in with Google </button>
+                    <button onClick={handleWithGoogle} className=' bg-blue-600 text-2xl py-4 px-4 rounded hover:bg-blue-800 text-white mt-5'> Log in with Google </button>
                     <button className=' bg-blue-600 text-2xl py-4 px-4 rounded hover:bg-blue-800 text-white mt-5'> Log in with Github</button>
                     <button className=' bg-blue-600 text-2xl py-4 px-4 rounded hover:bg-blue-800 text-white mt-5'> Log in with Facebook</button>
                     <button className=' bg-blue-600 text-2xl py-4 px-4 rounded hover:bg-blue-800 text-white mt-5'> Log in with Twitter</button>
